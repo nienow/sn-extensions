@@ -12677,9 +12677,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sn-list@workspace:.":
+"sn-extensions@workspace:.":
   version: 0.0.0-use.local
-  resolution: "sn-list@workspace:."
+  resolution: "sn-extensions@workspace:."
   dependencies:
     "@jest/globals": ^29.1.2
     "@standardnotes/editor-kit": 2.2.5

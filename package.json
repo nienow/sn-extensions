@@ -1,13 +1,14 @@
 {
   "name": "sn-extensions",
   "version": "0.1.0",
+  "homepage": "https://nienow.github.io/sn-extensions",
   "private": true,
   "packageManager": "yarn@3.2.3",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "deploy": "npm run build & gh-pages -d build"
+    "deploy": "yarn build & gh-pages -d build"
   },
   "dependencies": {
     "@standardnotes/editor-kit": "2.2.5",

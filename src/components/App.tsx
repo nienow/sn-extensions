@@ -5,15 +5,15 @@ import ListEditor from "../list/ListEditor";
 
 const DEFAULT_ROUTE = <div>Invalid</div>;
 const ROUTES = {
-  '/grid/': <GridEditor></GridEditor>,
-  '/list/': <ListEditor></ListEditor>
+  '#grid': <GridEditor></GridEditor>,
+  '#list': <ListEditor></ListEditor>
 };
 
 const App = () => {
   return (
     <DialogProvider>
       {
-        ROUTES[location.pathname] || DEFAULT_ROUTE
+        ROUTES[location.hash] || DEFAULT_ROUTE
       }
     </DialogProvider>
   );
