@@ -1,6 +1,6 @@
-import {DataVersion, EditorData, NienowList} from './list-definitions';
+import {DataVersion, IListData, NienowList} from './list-definitions';
 
-const TestDataObject: EditorData = {
+const TestDataObject: IListData = {
   editor: NienowList,
   version: DataVersion,
   fields: ['title', 'price'],

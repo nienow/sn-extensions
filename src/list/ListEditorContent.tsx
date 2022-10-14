@@ -1,13 +1,13 @@
 import React, {useEffect} from 'react';
 import ListSection from "./ListSection";
-import {EditorData} from "./list-definitions";
+import {IListData} from "./list-definitions";
 import styled from "styled-components";
 import useTotals from "./useTotals";
 import ListTotal from "./ListTotal";
-import TableHeader from "../components/TableHeader";
+import ListTableHeader from "./ListTableHeader";
 
 interface Params {
-  data: EditorData;
+  data: IListData;
   saveNote: () => void;
   handleAdd: () => void;
   handleDelete: (index: number) => void;
@@ -16,6 +16,7 @@ interface Params {
 const EditorContentContainer = styled.div`
   display: table;
   padding: 5px;
+  border-collapse: collapse;
 `
 
 const ItemContainer = styled.div`
@@ -54,7 +55,7 @@ const ListEditorContent = ({data, saveNote, handleDelete, handleAdd}: Params) =>
   return (
     <>
       <EditorContentContainer>
-        <TableHeader fields={data.fields}></TableHeader>
+        <ListTableHeader fields={data.fields}></ListTableHeader>
         {
           data.items.map((item, index) => {
             return <ItemContainer key={index}>

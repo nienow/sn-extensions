@@ -1,11 +1,11 @@
 import React from 'react';
-import {ItemData} from "./list-definitions";
+import {IListItemData} from "./list-definitions";
 import ListField from "./ListField";
 import styled from "styled-components";
 import DeleteIcon from "../components/icons/DeleteIcon";
 
 interface Params {
-  item: ItemData;
+  item: IListItemData;
   fields: string[];
   onChange: (fieldName: string, value: any) => void;
   onDelete: () => void;

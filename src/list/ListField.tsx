@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
 import styled from "styled-components";
-import {ItemData} from "./list-definitions";
+import {IListItemData} from "./list-definitions";
 
 const FieldContainer = styled.div`
   display: table-cell;
-  border: 1px solid #aaa;
+  border: 1px solid var(--sn-stylekit-border-color);
   padding: 0 5px;
 `;
 
@@ -13,7 +13,6 @@ const FieldInput = styled.input`
   border: none;
   width: 100%;
   box-sizing: border-box;
-  //border-bottom: 1px solid #333;
 
   &:focus {
     outline: none;
@@ -22,7 +21,7 @@ const FieldInput = styled.input`
 
 interface Params {
   fieldName: string;
-  item: ItemData;
+  item: IListItemData;
   onChange: (e: any) => void;
 }
 

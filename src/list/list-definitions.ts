@@ -1,11 +1,11 @@
-export interface EditorData {
+export interface IListData {
   editor: string;
   version: number;
   fields: string[];
-  items: ItemData[];
+  items: IListItemData[];
 }
 
-export interface ItemData {
+export interface IListItemData {
   title?: string;
   comments?: string;
   date?: string;

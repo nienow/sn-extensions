@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {ItemData} from "./list-definitions";
+import {IListItemData} from "./list-definitions";
 
 interface ITotal {
   price: number;
@@ -8,7 +8,7 @@ interface ITotal {
 
 const useTotals = () => {
   const [totals, setTotals] = useState<ITotal>({price: 0, number: 0});
-  const updateTotals = (items: ItemData[]) => {
+  const updateTotals = (items: IListItemData[]) => {
     const newTotals: ITotal = {price: 0, number: 0};
     items.forEach(item => {
       newTotals.price += Number(item.price || 0);

@@ -3,8 +3,8 @@ import styled from "styled-components";
 
 const TotalCell = styled.div`
   display: table-cell;
-  border: 1px solid #aaa;
   padding: 5px;
+  font-weight: 500;
 `;
 
 const ListTotal = ({fields, totals}) => {

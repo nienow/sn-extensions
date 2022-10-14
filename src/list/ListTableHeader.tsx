@@ -7,8 +7,7 @@ interface Params {
 
 const TH = styled.div`
   display: table-cell;
-  font-weight: bold;
-  border: 1px solid #ddd;
+  font-weight: 500;
   text-align: left;
   text-transform: uppercase;
   padding: 5px;
@@ -21,7 +20,7 @@ const colWidths = {
   date: 150
 }
 
-const TableHeader = ({fields}: Params) => {
+const ListTableHeader = ({fields}: Params) => {
   return (
     <>
       {
@@ -33,4 +32,4 @@ const TableHeader = ({fields}: Params) => {
   );
 };
 
-export default TableHeader
+export default ListTableHeader

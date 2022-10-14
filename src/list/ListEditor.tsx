@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import EditorKit from "@standardnotes/editor-kit";
 import ListHeader from "./ListHeader";
-import {EditorData} from "./list-definitions";
+import {IListData} from "./list-definitions";
 import styled from "styled-components";
 import ListEditorContent from "./ListEditorContent";
 import {newEditorData, transformEditorData} from "./list-transformations";
@@ -14,8 +14,11 @@ const EditorContainer = styled.div`
   min-height: 100vh;
 `
 
+let backupData;
+
 const ListEditor = () => {
-  const [data, setData] = useState<EditorData>(undefined);
+  const [data, setData] = useState<IListData>(undefined);
+  const [hasChanges, setHasChanges] = useState(false);
   const [unsupported, setUnsupported] = useState(false);
   const [editorKit, setEditorKit] = useState<EditorKit>(null);
 
@@ -37,6 +40,7 @@ const ListEditor = () => {
   const initializeText = (text: string) => {
     const data = transformEditorData(text);
     if (data) {
+      backupData = JSON.parse(JSON.stringify(data));
       setData(data);
     } else {
       setUnsupported(true);
@@ -50,6 +54,7 @@ const ListEditor = () => {
   };
 
   const saveNote = () => {
+    setHasChanges(true);
     const text = JSON.stringify(data);
     try {
       editorKit?.onEditorValueChanged(text);
@@ -83,10 +88,17 @@ const ListEditor = () => {
     setData({...data});
   };
 
+  const revertChanges = () => {
+    console.log(backupData);
+    saveNote();
+    setData(JSON.parse(JSON.stringify(backupData)));
+    setHasChanges(false);
+  };
+
   if (data) {
     return (
       <EditorContainer>
-        <ListHeader data={data} toggleField={toggleField}></ListHeader>
+        <ListHeader data={data} hasChanges={hasChanges} toggleField={toggleField} revertChanges={revertChanges}></ListHeader>
         <ListEditorContent saveNote={saveNote} data={data} handleAdd={addItem} handleDelete={handleDelete}></ListEditorContent>
       </EditorContainer>
     );

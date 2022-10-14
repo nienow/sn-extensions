@@ -1,6 +1,6 @@
-import {DataVersion, EditorData, ItemData, NienowList} from './list-definitions';
+import {DataVersion, IListData, IListItemData, NienowList} from './list-definitions';
 
-export const newEditorData = (): EditorData => {
+export const newEditorData = (): IListData => {
   return {
     editor: NienowList,
     version: DataVersion,
@@ -11,11 +11,11 @@ export const newEditorData = (): EditorData => {
   };
 };
 
-export const newNoteData = (): ItemData => {
+export const newNoteData = (): IListItemData => {
   return {};
 };
 
-export const transformEditorData = (text: string): EditorData => {
+export const transformEditorData = (text: string): IListData => {
   if (text) {
     if (text.indexOf('{') === 0) {
       try {
