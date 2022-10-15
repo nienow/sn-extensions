@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import ListSection from "./ListSection";
+import ListItem from "./ListItem";
 import {IListData} from "./list-definitions";
 import styled from "styled-components";
 import useTotals from "./useTotals";
@@ -59,9 +59,9 @@ const ListEditorContent = ({data, saveNote, handleDelete, handleAdd}: Params) =>
         {
           data.items.map((item, index) => {
             return <ItemContainer key={index}>
-              <ListSection item={item} fields={data.fields}
-                           onDelete={() => onDelete(index)}
-                           onChange={(fieldName, value) => handleInputChange(index, fieldName, value)}></ListSection>
+              <ListItem item={item} fields={data.fields}
+                        onDelete={() => onDelete(index)}
+                        onChange={(fieldName, value) => handleInputChange(index, fieldName, value)}></ListItem>
 
             </ItemContainer>;
           })

@@ -89,7 +89,6 @@ const ListEditor = () => {
   };
 
   const revertChanges = () => {
-    console.log(backupData);
     saveNote();
     setData(JSON.parse(JSON.stringify(backupData)));
     setHasChanges(false);

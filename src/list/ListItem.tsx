@@ -15,7 +15,7 @@ const DeleteButton = styled.button`
   padding: 5px;
 `;
 
-const ListSection = (params: Params) => {
+const ListItem = (params: Params) => {
   return (
     <>
       {
@@ -28,4 +28,4 @@ const ListSection = (params: Params) => {
   );
 };
 
-export default ListSection
+export default ListItem

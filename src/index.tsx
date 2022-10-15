@@ -1,7 +1,7 @@
 import React from 'react';
 import './index.scss';
 
-import App from './components/App';
+import App from './App';
 import './stylesheets/main.scss';
 import {createRoot} from "react-dom/client";
 
