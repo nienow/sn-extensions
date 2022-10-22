@@ -4,10 +4,6 @@ export interface ITabData {
   tabs: Tab[];
 }
 
-export const NienowGrid = 'nienow.grid';
-export const NienowSticky = 'nienow.sticky';
-export const DataVersion = 1;
-
 export interface Tab {
   title?: string;
   text?: string;

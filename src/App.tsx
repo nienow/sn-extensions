@@ -3,6 +3,7 @@ import {DialogProvider} from "./providers/DialogProvider";
 import GridEditor from "./grid/GridEditor";
 import ListEditor from "./list/ListEditor";
 import TabEditor from "./tab/TabEditor";
+import {PopoverProvider} from "./providers/PopoverProvider";
 
 const DEFAULT_ROUTE = <div>Invalid</div>;
 const ROUTES = {
@@ -14,9 +15,11 @@ const ROUTES = {
 const App = () => {
   return (
     <DialogProvider>
-      {
-        ROUTES[location.hash] || DEFAULT_ROUTE
-      }
+      <PopoverProvider>
+        {
+          ROUTES[location.hash] || DEFAULT_ROUTE
+        }
+      </PopoverProvider>
     </DialogProvider>
   );
 }

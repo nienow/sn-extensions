@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import EditorKit from "@standardnotes/editor-kit";
-import {DialogProvider} from "../providers/DialogProvider";
+import {DialogProvider, useDialog} from "../providers/DialogProvider";
 import styled from "styled-components";
 import {ITabData} from "./tab-definitions";
 import {newEditorData, transformEditorData} from "./tab-transformations";
 import Unsupported from "../components/Unsupported";
-import {TestData} from "./tab-test-data";
 import DeleteIcon from "../components/icons/DeleteIcon";
+import {usePopover} from "../providers/PopoverProvider";
 
 const EditorContainer = styled.div`
   display: flex;
@@ -40,9 +40,17 @@ const TabTitle = styled.div`
   flex: 1 1 auto;
 `;
 
-const DeleteButton = styled.div`
-  margin-left: 5px;
+const TabTitleEditable = styled.input`
+  flex: 1 1 auto;
+  border: none;
+  //background-color: var(--sn-stylekit-contrast-background-color);
+  outline: none;
+  color: var(--sn-stylekit-foreground-color);
 `;
+
+// const DeleteButton = styled.div`
+//   margin-left: 5px;
+// `;
 
 const SectionTextArea = styled.textarea`
   flex: 1 1 auto;
@@ -59,10 +67,13 @@ const SectionTextArea = styled.textarea`
 `;
 
 const TabEditor = () => {
+  let workingTitle = '';
   const [data, setData] = useState<ITabData>(null);
   const [activeTab, setActiveTab] = useState<number>(0);
   const [unsupported, setUnsupported] = useState(false);
   const [editorKit, setEditorKit] = useState(null);
+  const {popover} = usePopover();
+  const {confirm} = useDialog();
 
   useEffect(() => {
     setEditorKit(new EditorKit({
@@ -76,7 +87,7 @@ const TabEditor = () => {
     }));
 
     // Uncomment to use test data
-    initializeText(TestData);
+    // initializeText(TestData);
   }, []);
 
   const initializeText = (text) => {
@@ -97,7 +108,7 @@ const TabEditor = () => {
   const saveNote = () => {
     const text = JSON.stringify(data);
     try {
-      editorKit?.onEditorValueChanged(text);
+      editorKit.onEditorValueChanged(text);
     } catch (error) {
       console.log('Error saving note:', error);
     }
@@ -121,6 +132,16 @@ const TabEditor = () => {
     saveNote();
   };
 
+  const deleteTabConfirm = (index) => {
+    if (data.tabs[index].text) {
+      confirm('Are you sure you want to remove this tab?', () => {
+        deleteTab(index)
+      });
+    } else {
+      deleteTab(index);
+    }
+  };
+
   const deleteTab = (index) => {
     data.tabs.splice(index, 1);
     const newData = {...data};
@@ -129,7 +150,37 @@ const TabEditor = () => {
     saveNote();
   };
 
-  console.log(activeTab);
+  const onTitleChange = () => {
+    console.log(workingTitle);
+    data.tabs[activeTab].title = workingTitle;
+    setData({...data});
+    saveNote();
+  };
+
+  const openPopover = (e, tab, index) => {
+    workingTitle = tab.title;
+    let closePopover;
+    const onDeleteIconClick = () => {
+      closePopover();
+      deleteTabConfirm(index)
+    };
+    const popoverContents = <div>
+      <TabTitleEditable id="working-title" defaultValue={tab.title} onChange={(e) => workingTitle = e.target.value}></TabTitleEditable>
+      <button onClick={onDeleteIconClick}><DeleteIcon/></button>
+    </div>;
+    closePopover = popover(e.target.parentNode, popoverContents, onTitleChange);
+    setTimeout(() => {
+      const el = document.getElementById('working-title') as HTMLInputElement;
+      el.select();
+    });
+  };
+
+  const renderTabTitle = (index, tab) => {
+    if (index === activeTab) {
+      return <TabTitle onClick={(e) => openPopover(e, tab, index)}>{tab.title}</TabTitle>;
+    }
+    return <TabTitle onClick={() => changeTab(index)}>{tab.title}</TabTitle>
+  };
 
   if (data) {
     return (
@@ -139,11 +190,11 @@ const TabEditor = () => {
             {
               data.tabs.map((tab, index) => (
                 <TabTitleContainer key={index} className={index === activeTab ? 'active' : ''}>
-                  <TabTitle onClick={() => changeTab(index)}>{tab.title}</TabTitle>
-                  {
-                    (index === activeTab) ? <DeleteButton onClick={() => deleteTab(index)}><DeleteIcon></DeleteIcon></DeleteButton> :
-                      <div></div>
-                  }
+                  {renderTabTitle(index, tab)}
+                  {/*{*/}
+                  {/*  (index === activeTab) ? <DeleteButton onClick={() => deleteTabConfirm(index)}><DeleteIcon></DeleteIcon></DeleteButton> :*/}
+                  {/*    <div></div>*/}
+                  {/*}*/}
                 </TabTitleContainer>
               ))
             }

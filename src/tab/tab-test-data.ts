@@ -1,7 +1,7 @@
-import {DataVersion, NienowGrid} from './tab-definitions';
+import {DataVersion, NienowTab} from '../constants';
 
 export const TestData = JSON.stringify({
-  editor: NienowGrid,
+  editor: NienowTab,
   version: DataVersion,
   tabs: [
     {
