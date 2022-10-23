@@ -1,10 +1,10 @@
 {
   "identifier": "nienow.tab",
-  "name": "Tab Layout",
+  "name": "Multiple Tabs",
   "content_type": "SN|Component",
   "area": "editor-editor",
   "version": "0.1.0",
-  "description": "Editor Tab Layout",
+  "description": "Multiple Tabs",
   "url": "https://nienow.github.io/sn-extensions#tab",
   "download_url": "",
   "latest_url": "",
