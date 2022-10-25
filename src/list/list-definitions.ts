@@ -12,6 +12,3 @@ export interface IListItemData {
   price?: number;
   number?: number;
 }
-
-export const NienowList = 'nienow.list';
-export const DataVersion = 1;

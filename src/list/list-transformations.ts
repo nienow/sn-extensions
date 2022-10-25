@@ -1,4 +1,5 @@
-import {DataVersion, IListData, IListItemData, NienowList} from './list-definitions';
+import {IListData, IListItemData} from './list-definitions';
+import {DataVersion, NienowList} from '../constants';
 
 export const newEditorData = (): IListData => {
   return {

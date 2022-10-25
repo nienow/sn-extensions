@@ -1,6 +1,7 @@
-import {DataVersion, EditorData, NienowGrid, NienowSticky} from './grid-definitions';
+import {IGridData} from './grid-definitions';
+import {DataVersion, NienowGrid, NienowSticky} from '../constants';
 
-export const newEditorData = (text): EditorData => {
+export const newEditorData = (text): IGridData => {
   return {
     editor: NienowGrid,
     version: DataVersion,
@@ -10,7 +11,7 @@ export const newEditorData = (text): EditorData => {
   };
 };
 
-export const transformEditorData = (text: string): EditorData => {
+export const transformEditorData = (text: string): IGridData => {
   if (text) {
     if (text.indexOf('{') === 0) {
       try {
@@ -30,8 +31,8 @@ export const transformEditorData = (text: string): EditorData => {
   }
 };
 
-export const transformFromSticky = (data: any): EditorData => {
-  const newData: EditorData = {
+export const transformFromSticky = (data: any): IGridData => {
+  const newData: IGridData = {
     editor: NienowGrid,
     version: 1,
     rows: 0,

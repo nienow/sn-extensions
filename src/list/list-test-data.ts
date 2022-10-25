@@ -1,4 +1,5 @@
-import {DataVersion, IListData, NienowList} from './list-definitions';
+import {IListData} from './list-definitions';
+import {DataVersion, NienowList} from '../constants';
 
 const TestDataObject: IListData = {
   editor: NienowList,

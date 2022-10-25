@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import EditorKit from "@standardnotes/editor-kit";
-import GridHeader from "./GridHeader";
-import GridSection from "./GridSection";
+import Header from "./Header";
 import styled from "styled-components";
-import {IGridData} from "./grid-definitions";
-import {newEditorData, transformEditorData} from "./grid-transformations";
+import EditorContent from "./EditorContent";
+import {IStickyData} from "./sticky-definitions";
+import {newEditorData, newNoteData, transformEditorData} from "./sticky-transformations";
 import Unsupported from "../components/Unsupported";
-import {GridTestData} from "./grid-test-data";
 import {isDevEnv} from "../environment";
+import {StickyTestData} from "./sticky-test-data";
 
 const EditorContainer = styled.div`
   display: flex;
@@ -15,27 +15,8 @@ const EditorContainer = styled.div`
   min-height: 100vh;
 `
 
-const EditorContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 auto;
-`
-
-const EditorRow = styled.div`
-  border-bottom: 1px solid var(--sn-stylekit-border-color);
-  display: flex;
-  flex: 1 0 auto;
-`
-
-const EditorSection = styled.div`
-  border-right: 1px solid var(--sn-stylekit-border-color);
-  display: flex;
-  flex-direction: column;
-  flex: 1 0 auto;
-`
-
-const GridEditor = () => {
-  const [data, setData] = useState<IGridData>(null);
+const StickyEditor = () => {
+  const [data, setData] = useState<IStickyData>(undefined);
   const [unsupported, setUnsupported] = useState(false);
   const [editorKit, setEditorKit] = useState(null);
 
@@ -51,7 +32,7 @@ const GridEditor = () => {
     }));
 
     if (isDevEnv()) {
-      initializeText(GridTestData);
+      initializeText(StickyTestData);
     }
   }, []);
 
@@ -66,7 +47,7 @@ const GridEditor = () => {
 
   const eraseDataAndStartNewNote = () => {
     setUnsupported(false);
-    setData(newEditorData(''));
+    setData(newEditorData());
     saveNote();
   };
 
@@ -79,7 +60,24 @@ const GridEditor = () => {
     }
   };
 
-  const saveNoteAndRefresh = () => {
+  const addSection = () => {
+    Object.values(data.sections).forEach(section => {
+      section.index++;
+    });
+    const newId = new Date().getTime();
+    data.sections[newId] = newNoteData();
+    setData({...data});
+    saveNote();
+  };
+
+  const handleDelete = (sectionId) => {
+    const index = data.sections[sectionId].index;
+    delete data.sections[sectionId];
+    Object.values(data.sections).forEach(section => {
+      if (section.index > index) {
+        section.index--;
+      }
+    });
     setData({...data});
     saveNote();
   };
@@ -87,24 +85,8 @@ const GridEditor = () => {
   if (data) {
     return (
       <EditorContainer>
-        <GridHeader data={data} saveNote={saveNoteAndRefresh}></GridHeader>
-        <EditorContent>
-          {
-            data.sections.map((row, i) => {
-              return <EditorRow key={i}>
-                {
-                  row.map((section, j) => {
-                    return <EditorSection key={j}>
-                      {
-                        <GridSection section={section} saveNote={saveNote}></GridSection>
-                      }
-                    </EditorSection>;
-                  })
-                }
-              </EditorRow>;
-            })
-          }
-        </EditorContent>
+        <Header data={data} addSection={addSection}></Header>
+        <EditorContent saveNote={saveNote} data={data} handleDelete={handleDelete}></EditorContent>
       </EditorContainer>
     );
   } else if (unsupported) {
@@ -114,4 +96,4 @@ const GridEditor = () => {
   }
 }
 
-export default GridEditor
+export default StickyEditor

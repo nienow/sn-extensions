@@ -1,7 +1,7 @@
 import React from 'react';
 import {useDialog} from "../providers/DialogProvider";
 import styled from "styled-components";
-import {EditorData} from "./grid-definitions";
+import {IGridData} from "./grid-definitions";
 import NumberControl from "../components/NumberControl";
 
 const HeaderContainer = styled.div`
@@ -11,7 +11,7 @@ const HeaderContainer = styled.div`
 `
 
 interface Params {
-  data: EditorData;
+  data: IGridData;
   saveNote: () => void;
 }
 
