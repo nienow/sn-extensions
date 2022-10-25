@@ -19,6 +19,8 @@ const ListTotal = ({fields, totals}) => {
             return <TotalCell key={field}>{totals.price.toFixed(2)}</TotalCell>
           } else if (field === 'number') {
             return <TotalCell key={field}>{totals.number}</TotalCell>
+          } else {
+            return <TotalCell></TotalCell>
           }
         })
       }

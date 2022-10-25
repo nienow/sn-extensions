@@ -1,6 +1,7 @@
 export interface ISectionData {
   editor: string;
   version: number;
+  title?: boolean;
   sections: Section[];
 }
 

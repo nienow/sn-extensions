@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import EditorKit from "@standardnotes/editor-kit";
 import GridHeader from "./GridHeader";
 import GridSection from "./GridSection";
-import {DialogProvider} from "../providers/DialogProvider";
 import styled from "styled-components";
 import {EditorData} from "./grid-definitions";
 import {newEditorData, transformEditorData} from "./grid-transformations";
@@ -85,28 +84,26 @@ const GridEditor = () => {
 
   if (data) {
     return (
-      <DialogProvider>
-        <EditorContainer>
-          <GridHeader data={data} saveNote={saveNoteAndRefresh}></GridHeader>
-          <EditorContent>
-            {
-              data.sections.map((row, i) => {
-                return <EditorRow key={i}>
-                  {
-                    row.map((section, j) => {
-                      return <EditorSection key={j}>
-                        {
-                          <GridSection section={section} saveNote={saveNote}></GridSection>
-                        }
-                      </EditorSection>;
-                    })
-                  }
-                </EditorRow>;
-              })
-            }
-          </EditorContent>
-        </EditorContainer>
-      </DialogProvider>
+      <EditorContainer>
+        <GridHeader data={data} saveNote={saveNoteAndRefresh}></GridHeader>
+        <EditorContent>
+          {
+            data.sections.map((row, i) => {
+              return <EditorRow key={i}>
+                {
+                  row.map((section, j) => {
+                    return <EditorSection key={j}>
+                      {
+                        <GridSection section={section} saveNote={saveNote}></GridSection>
+                      }
+                    </EditorSection>;
+                  })
+                }
+              </EditorRow>;
+            })
+          }
+        </EditorContent>
+      </EditorContainer>
     );
   } else if (unsupported) {
     return (

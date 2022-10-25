@@ -1,12 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import EditorKit from "@standardnotes/editor-kit";
-import {DialogProvider, useDialog} from "../providers/DialogProvider";
+import {useDialog} from "../providers/DialogProvider";
 import styled from "styled-components";
 import {ITabData} from "./tab-definitions";
 import {newEditorData, transformEditorData} from "./tab-transformations";
 import Unsupported from "../components/Unsupported";
 import DeleteIcon from "../components/icons/DeleteIcon";
 import {usePopover} from "../providers/PopoverProvider";
+import {TabTestData} from "./tab-test-data";
+import ActionButton from "../components/ActionButton";
 
 const EditorContainer = styled.div`
   display: flex;
@@ -66,6 +68,18 @@ const SectionTextArea = styled.textarea`
   color: var(--sn-stylekit-foreground-color);
 `;
 
+const AddTabButton = styled.button`
+  border: none;
+  background-color: inherit;
+  color: inherit;
+  cursor: pointer;
+  border-right: 1px solid var(--sn-stylekit-border-color);
+
+  &:hover {
+    background-color: var(--sn-stylekit-contrast-background-color);;
+  }
+`;
+
 const TabEditor = () => {
   let workingTitle = '';
   const [data, setData] = useState<ITabData>(null);
@@ -87,7 +101,7 @@ const TabEditor = () => {
     }));
 
     // Uncomment to use test data
-    // initializeText(TestData);
+    initializeText(TabTestData);
   }, []);
 
   const initializeText = (text) => {
@@ -166,7 +180,7 @@ const TabEditor = () => {
     };
     const popoverContents = <div>
       <TabTitleEditable id="working-title" defaultValue={tab.title} onChange={(e) => workingTitle = e.target.value}></TabTitleEditable>
-      <button onClick={onDeleteIconClick}><DeleteIcon/></button>
+      <ActionButton onClick={onDeleteIconClick}><DeleteIcon/></ActionButton>
     </div>;
     closePopover = popover(e.target.parentNode, popoverContents, onTitleChange);
     setTimeout(() => {
@@ -184,27 +198,25 @@ const TabEditor = () => {
 
   if (data) {
     return (
-      <DialogProvider>
-        <EditorContainer>
-          <Tabs>
-            {
-              data.tabs.map((tab, index) => (
-                <TabTitleContainer key={index} className={index === activeTab ? 'active' : ''}>
-                  {renderTabTitle(index, tab)}
-                  {/*{*/}
-                  {/*  (index === activeTab) ? <DeleteButton onClick={() => deleteTabConfirm(index)}><DeleteIcon></DeleteIcon></DeleteButton> :*/}
-                  {/*    <div></div>*/}
-                  {/*}*/}
-                </TabTitleContainer>
-              ))
-            }
-            <button onClick={addTab}>+</button>
-          </Tabs>
-          <EditorContent>
-            <SectionTextArea tabIndex={1} name="value" value={data.tabs[activeTab]?.text || ''} onChange={onTextChange}/>
-          </EditorContent>
-        </EditorContainer>
-      </DialogProvider>
+      <EditorContainer>
+        <Tabs>
+          {
+            data.tabs.map((tab, index) => (
+              <TabTitleContainer key={index} className={index === activeTab ? 'active' : ''}>
+                {renderTabTitle(index, tab)}
+                {/*{*/}
+                {/*  (index === activeTab) ? <DeleteButton onClick={() => deleteTabConfirm(index)}><DeleteIcon></DeleteIcon></DeleteButton> :*/}
+                {/*    <div></div>*/}
+                {/*}*/}
+              </TabTitleContainer>
+            ))
+          }
+          <AddTabButton onClick={addTab}>+</AddTabButton>
+        </Tabs>
+        <EditorContent>
+          <SectionTextArea tabIndex={1} name="value" value={data.tabs[activeTab]?.text || ''} onChange={onTextChange}/>
+        </EditorContent>
+      </EditorContainer>
     );
   } else if (unsupported) {
     return (

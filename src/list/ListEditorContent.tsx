@@ -5,6 +5,7 @@ import styled from "styled-components";
 import useTotals from "./useTotals";
 import ListTotal from "./ListTotal";
 import ListTableHeader from "./ListTableHeader";
+import {BigActionButton} from "../components/ActionButton";
 
 interface Params {
   data: IListData;
@@ -72,7 +73,7 @@ const ListEditorContent = ({data, saveNote, handleDelete, handleAdd}: Params) =>
         </ItemContainer>
       </EditorContentContainer>
       <AddButtonCell>
-        <button onClick={handleAdd}>Add +</button>
+        <BigActionButton onClick={handleAdd}>Add +</BigActionButton>
       </AddButtonCell>
     </>
   );

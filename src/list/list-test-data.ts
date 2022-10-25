@@ -5,8 +5,8 @@ const TestDataObject: IListData = {
   version: DataVersion,
   fields: ['title', 'price'],
   items: [
-    {title: 'One', price: 11.1},
-    {title: 'Two', price: 2.22}
+    {title: 'One', price: 11.1, date: '2022-10-05'},
+    {title: 'Two', price: 2.22, date: '2022-10-06'}
   ]
 };
 

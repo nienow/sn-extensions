@@ -1,6 +1,6 @@
 import {DataVersion, NienowTab} from '../constants';
 
-export const TestData = JSON.stringify({
+export const TabTestData = JSON.stringify({
   editor: NienowTab,
   version: DataVersion,
   tabs: [
