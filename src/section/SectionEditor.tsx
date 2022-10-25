@@ -4,10 +4,11 @@ import styled from "styled-components";
 import {ISectionData} from "./section-definitions";
 import {newEditorData, transformEditorData} from "./section-transformations";
 import Unsupported from "../components/Unsupported";
-import {TestData} from "./section-test-data";
+import {SectionTestData} from "./section-test-data";
 import AutoSizeTextArea from "./AutoSizeTextArea";
 import SectionHeader from "./SectionHeader";
 import {BigActionButton} from "../components/ActionButton";
+import {isDevEnv} from "../environment";
 
 const EditorContainer = styled.div`
   display: flex;
@@ -46,8 +47,9 @@ const SectionEditor = () => {
       supportsFileSafe: false
     }));
 
-    // Uncomment to use test data
-    initializeText(TestData);
+    if (isDevEnv()) {
+      initializeText(SectionTestData);
+    }
   }, []);
 
   const initializeText = (text) => {

@@ -1,6 +1,6 @@
 import {DataVersion, NienowSection} from '../constants';
 
-export const TestData = JSON.stringify({
+export const SectionTestData = JSON.stringify({
   editor: NienowSection,
   version: DataVersion,
   title: true,

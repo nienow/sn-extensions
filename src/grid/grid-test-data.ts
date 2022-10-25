@@ -1,6 +1,6 @@
 import {DataVersion, NienowGrid} from './grid-definitions';
 
-export const TestData = JSON.stringify({
+export const GridTestData = JSON.stringify({
   editor: NienowGrid,
   version: DataVersion,
   rows: 2,

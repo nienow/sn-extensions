@@ -9,6 +9,7 @@ import DeleteIcon from "../components/icons/DeleteIcon";
 import {usePopover} from "../providers/PopoverProvider";
 import {TabTestData} from "./tab-test-data";
 import ActionButton from "../components/ActionButton";
+import {isDevEnv} from "../environment";
 
 const EditorContainer = styled.div`
   display: flex;
@@ -100,8 +101,9 @@ const TabEditor = () => {
       supportsFileSafe: false
     }));
 
-    // Uncomment to use test data
-    initializeText(TabTestData);
+    if (isDevEnv()) {
+      initializeText(TabTestData);
+    }
   }, []);
 
   const initializeText = (text) => {

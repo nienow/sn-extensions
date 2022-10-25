@@ -7,6 +7,7 @@ import ListEditorContent from "./ListEditorContent";
 import {newEditorData, transformEditorData} from "./list-transformations";
 import {ListTestData} from "./list-test-data";
 import Unsupported from "../components/Unsupported";
+import {isDevEnv} from "../environment";
 
 const EditorContainer = styled.div`
   display: flex;
@@ -33,8 +34,9 @@ const ListEditor = () => {
       supportsFileSafe: false
     }));
 
-    // Uncomment to use test data
-    initializeText(ListTestData);
+    if (isDevEnv()) {
+      initializeText(ListTestData);
+    }
   }, []);
 
   const initializeText = (text: string) => {

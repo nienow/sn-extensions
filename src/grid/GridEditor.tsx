@@ -6,7 +6,8 @@ import styled from "styled-components";
 import {EditorData} from "./grid-definitions";
 import {newEditorData, transformEditorData} from "./grid-transformations";
 import Unsupported from "../components/Unsupported";
-import {TestData} from "./grid-test-data";
+import {GridTestData} from "./grid-test-data";
+import {isDevEnv} from "../environment";
 
 const EditorContainer = styled.div`
   display: flex;
@@ -49,8 +50,9 @@ const GridEditor = () => {
       supportsFileSafe: false
     }));
 
-    // Uncomment to use test data
-    initializeText(TestData);
+    if (isDevEnv()) {
+      initializeText(GridTestData);
+    }
   }, []);
 
   const initializeText = (text) => {
