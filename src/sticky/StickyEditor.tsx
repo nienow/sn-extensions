@@ -1,13 +1,10 @@
-import React, {useEffect, useState} from 'react';
-import EditorKit from "@standardnotes/editor-kit";
+import React from 'react';
 import Header from "./Header";
 import styled from "styled-components";
 import EditorContent from "./EditorContent";
-import {IStickyData} from "./sticky-definitions";
-import {newEditorData, newNoteData, transformEditorData} from "./sticky-transformations";
-import Unsupported from "../components/Unsupported";
-import {isDevEnv} from "../environment";
-import {StickyTestData} from "./sticky-test-data";
+import {IStickySectionData} from "./sticky-definitions";
+import {newNoteData} from "./sticky-transformations";
+import {useEditor} from "../providers/EditorProvider";
 
 const EditorContainer = styled.div`
   display: flex;
@@ -16,84 +13,34 @@ const EditorContainer = styled.div`
 `
 
 const StickyEditor = () => {
-  const [data, setData] = useState<IStickyData>(undefined);
-  const [unsupported, setUnsupported] = useState(false);
-  const [editorKit, setEditorKit] = useState(null);
-
-  useEffect(() => {
-    setEditorKit(new EditorKit({
-      setEditorRawText: initializeText,
-      clearUndoHistory: () => {
-      },
-      getElementsBySelector: () => []
-    }, {
-      mode: 'plaintext',
-      supportsFileSafe: false
-    }));
-
-    if (isDevEnv()) {
-      initializeText(StickyTestData);
-    }
-  }, []);
-
-  const initializeText = (text) => {
-    const data = transformEditorData(text);
-    if (data) {
-      setData(data);
-    } else {
-      setUnsupported(true);
-    }
-  };
-
-  const eraseDataAndStartNewNote = () => {
-    setUnsupported(false);
-    setData(newEditorData());
-    saveNote();
-  };
-
-  const saveNote = () => {
-    const text = JSON.stringify(data);
-    try {
-      editorKit?.onEditorValueChanged(text);
-    } catch (error) {
-      console.log('Error saving note:', error);
-    }
-  };
+  const {data, saveNote, saveNoteAndRefresh} = useEditor();
 
   const addSection = () => {
-    Object.values(data.sections).forEach(section => {
+    Object.values(data.sections).forEach((section: IStickySectionData) => {
       section.index++;
     });
     const newId = new Date().getTime();
     data.sections[newId] = newNoteData();
-    setData({...data});
-    saveNote();
+    saveNoteAndRefresh();
   };
 
   const handleDelete = (sectionId) => {
     const index = data.sections[sectionId].index;
     delete data.sections[sectionId];
-    Object.values(data.sections).forEach(section => {
+    Object.values(data.sections).forEach((section: IStickySectionData) => {
       if (section.index > index) {
         section.index--;
       }
     });
-    setData({...data});
-    saveNote();
+    saveNoteAndRefresh();
   };
 
-  if (data) {
-    return (
-      <EditorContainer>
-        <Header data={data} addSection={addSection}></Header>
-        <EditorContent saveNote={saveNote} data={data} handleDelete={handleDelete}></EditorContent>
-      </EditorContainer>
-    );
-  } else if (unsupported) {
-    return (
-      <Unsupported eraseFn={eraseDataAndStartNewNote}></Unsupported>
-    )
-  }
+  return (
+    <EditorContainer>
+      <Header data={data} addSection={addSection}></Header>
+      <EditorContent saveNote={saveNote} data={data} handleDelete={handleDelete}></EditorContent>
+    </EditorContainer>
+  );
 }
 
 export default StickyEditor

@@ -1,15 +1,10 @@
-import React, {useEffect, useState} from 'react';
-import EditorKit from "@standardnotes/editor-kit";
+import React, {useState} from 'react';
 import {useDialog} from "../providers/DialogProvider";
 import styled from "styled-components";
-import {ITabData} from "./tab-definitions";
-import {newEditorData, transformEditorData} from "./tab-transformations";
-import Unsupported from "../components/Unsupported";
 import DeleteIcon from "../components/icons/DeleteIcon";
 import {usePopover} from "../providers/PopoverProvider";
-import {TabTestData} from "./tab-test-data";
 import ActionButton from "../components/ActionButton";
-import {isDevEnv} from "../environment";
+import {useEditor} from "../providers/EditorProvider";
 
 const EditorContainer = styled.div`
   display: flex;
@@ -83,52 +78,10 @@ const AddTabButton = styled.button`
 
 const TabEditor = () => {
   let workingTitle = '';
-  const [data, setData] = useState<ITabData>(null);
+  const {data, saveNoteAndRefresh} = useEditor();
   const [activeTab, setActiveTab] = useState<number>(0);
-  const [unsupported, setUnsupported] = useState(false);
-  const [editorKit, setEditorKit] = useState(null);
   const {popover} = usePopover();
   const {confirm} = useDialog();
-
-  useEffect(() => {
-    setEditorKit(new EditorKit({
-      setEditorRawText: initializeText,
-      clearUndoHistory: () => {
-      },
-      getElementsBySelector: () => []
-    }, {
-      mode: 'plaintext',
-      supportsFileSafe: false
-    }));
-
-    if (isDevEnv()) {
-      initializeText(TabTestData);
-    }
-  }, []);
-
-  const initializeText = (text) => {
-    const data = transformEditorData(text);
-    if (data) {
-      setData(data);
-    } else {
-      setUnsupported(true);
-    }
-  };
-
-  const eraseDataAndStartNewNote = () => {
-    setUnsupported(false);
-    setData(newEditorData(''));
-    saveNote();
-  };
-
-  const saveNote = () => {
-    const text = JSON.stringify(data);
-    try {
-      editorKit.onEditorValueChanged(text);
-    } catch (error) {
-      console.log('Error saving note:', error);
-    }
-  };
 
   const changeTab = (index) => {
     setActiveTab(index);
@@ -136,16 +89,14 @@ const TabEditor = () => {
 
   const onTextChange = (e) => {
     data.tabs[activeTab].text = e.target.value;
-    setData({...data});
-    saveNote();
+    saveNoteAndRefresh();
   };
 
   const addTab = () => {
     const newTab = {title: 'New'};
     data.tabs.push(newTab);
-    setData({...data});
     setActiveTab(data.tabs.length - 1);
-    saveNote();
+    saveNoteAndRefresh();
   };
 
   const deleteTabConfirm = (index) => {
@@ -160,17 +111,14 @@ const TabEditor = () => {
 
   const deleteTab = (index) => {
     data.tabs.splice(index, 1);
-    const newData = {...data};
-    setData(newData);
     setActiveTab(0);
-    saveNote();
+    saveNoteAndRefresh();
   };
 
   const onTitleChange = () => {
     console.log(workingTitle);
     data.tabs[activeTab].title = workingTitle;
-    setData({...data});
-    saveNote();
+    saveNoteAndRefresh();
   };
 
   const openPopover = (e, tab, index) => {
@@ -198,33 +146,27 @@ const TabEditor = () => {
     return <TabTitle onClick={() => changeTab(index)}>{tab.title}</TabTitle>
   };
 
-  if (data) {
-    return (
-      <EditorContainer>
-        <Tabs>
-          {
-            data.tabs.map((tab, index) => (
-              <TabTitleContainer key={index} className={index === activeTab ? 'active' : ''}>
-                {renderTabTitle(index, tab)}
-                {/*{*/}
-                {/*  (index === activeTab) ? <DeleteButton onClick={() => deleteTabConfirm(index)}><DeleteIcon></DeleteIcon></DeleteButton> :*/}
-                {/*    <div></div>*/}
-                {/*}*/}
-              </TabTitleContainer>
-            ))
-          }
-          <AddTabButton onClick={addTab}>+</AddTabButton>
-        </Tabs>
-        <EditorContent>
-          <SectionTextArea tabIndex={1} name="value" value={data.tabs[activeTab]?.text || ''} onChange={onTextChange}/>
-        </EditorContent>
-      </EditorContainer>
-    );
-  } else if (unsupported) {
-    return (
-      <Unsupported eraseFn={eraseDataAndStartNewNote}></Unsupported>
-    )
-  }
+  return (
+    <EditorContainer>
+      <Tabs>
+        {
+          data.tabs.map((tab, index) => (
+            <TabTitleContainer key={index} className={index === activeTab ? 'active' : ''}>
+              {renderTabTitle(index, tab)}
+              {/*{*/}
+              {/*  (index === activeTab) ? <DeleteButton onClick={() => deleteTabConfirm(index)}><DeleteIcon></DeleteIcon></DeleteButton> :*/}
+              {/*    <div></div>*/}
+              {/*}*/}
+            </TabTitleContainer>
+          ))
+        }
+        <AddTabButton onClick={addTab}>+</AddTabButton>
+      </Tabs>
+      <EditorContent>
+        <SectionTextArea tabIndex={1} name="value" value={data.tabs[activeTab]?.text || ''} onChange={onTextChange}/>
+      </EditorContent>
+    </EditorContainer>
+  );
 }
 
 export default TabEditor
