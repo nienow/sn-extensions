@@ -1,27 +1,29 @@
 import React from 'react';
 import {DialogProvider} from "./providers/DialogProvider";
-import GridEditor from "./grid/GridEditor";
-import ListEditor from "./list/ListEditor";
-import TabEditor from "./tab/TabEditor";
 import {PopoverProvider} from "./providers/PopoverProvider";
-import SectionEditor from "./section/SectionEditor";
-import StickyEditor from "./sticky/StickyEditor";
+import {EditorProvider} from "./providers/EditorProvider";
+import {GridEditorConfig} from "./grid/grid-config";
+import {StickyEditorConfig} from "./sticky/sticky-config";
+import {ListEditorConfig} from "./list/list-config";
+import {TabEditorConfig} from "./tab/tab-config";
+import {SectionEditorConfig} from "./section/section-config";
 
-const DEFAULT_ROUTE = <div>Invalid</div>;
 const ROUTES = {
-  '#grid': <GridEditor></GridEditor>,
-  '#sticky': <StickyEditor></StickyEditor>,
-  '#list': <ListEditor></ListEditor>,
-  '#tab': <TabEditor></TabEditor>,
-  '#section': <SectionEditor></SectionEditor>,
+  '#grid': GridEditorConfig,
+  '#sticky': StickyEditorConfig,
+  '#list': ListEditorConfig,
+  '#tab': TabEditorConfig,
+  '#section': SectionEditorConfig,
 };
 
 const App = () => {
+  const config = ROUTES[location.hash];
+
   return (
     <DialogProvider>
       <PopoverProvider>
         {
-          ROUTES[location.hash] || DEFAULT_ROUTE
+          config ? <EditorProvider config={config}></EditorProvider> : <div>Invalid</div>
         }
       </PopoverProvider>
     </DialogProvider>

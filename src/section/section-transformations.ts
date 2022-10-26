@@ -1,5 +1,6 @@
 import {ISectionData} from './section-definitions';
-import {DataVersion, NienowSection} from '../constants';
+import {DataVersion, NienowSection, NienowTab} from '../constants';
+import {ITabData} from '../tab/tab-definitions';
 
 export const newEditorData = (text): ISectionData => {
   return {
@@ -16,6 +17,8 @@ export const transformEditorData = (text: string): ISectionData => {
         const parsedData = JSON.parse(text);
         if (parsedData.editor === NienowSection && parsedData.version === 1) {
           return parsedData;
+        } else if (parsedData.editor === NienowTab && parsedData.version === 1) {
+          return transformFromTab(parsedData);
         }
       } catch (e) {
         console.error(e);
@@ -25,4 +28,13 @@ export const transformEditorData = (text: string): ISectionData => {
   } else {
     return newEditorData(text);
   }
+};
+
+export const transformFromTab = (data: ITabData) => {
+  return {
+    editor: NienowSection,
+    version: 1,
+    title: true,
+    sections: data.tabs
+  };
 };

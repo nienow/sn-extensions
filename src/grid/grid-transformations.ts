@@ -11,7 +11,7 @@ export const newEditorData = (text): IGridData => {
   };
 };
 
-export const transformEditorData = (text: string): IGridData => {
+export const transformEditorData = (text?: string): IGridData => {
   if (text) {
     if (text.indexOf('{') === 0) {
       try {

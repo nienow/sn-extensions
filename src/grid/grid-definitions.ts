@@ -3,10 +3,10 @@ export interface IGridData {
   version: number;
   rows: number;
   columns: number;
-  sections: SectionData[][];
+  sections: IGridSectionData[][];
 }
 
-export interface SectionData {
+export interface IGridSectionData {
   title?: string;
   text?: string;
 }

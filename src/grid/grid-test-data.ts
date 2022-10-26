@@ -1,6 +1,7 @@
 import {DataVersion, NienowGrid} from '../constants';
+import {IGridData} from './grid-definitions';
 
-export const GridTestData = JSON.stringify({
+const data: IGridData = {
   editor: NienowGrid,
   version: DataVersion,
   rows: 2,
@@ -13,4 +14,6 @@ export const GridTestData = JSON.stringify({
       {title: 'Section 3', text: 'Text 3'},
       {title: 'Section 4', text: 'Text 4'}
     ]]
-});
+};
+
+export const GridTestData = JSON.stringify(data);
